@@ -70,7 +70,7 @@ module.exports = {
   },
 
   getBySZentrale(id) {
-    return store.data.filter(station => statiob.szentrale.number === +id)
+    return store.data.filter(station => station.szentrale.number === +id)
   },
 
   getManagements() {
