@@ -66,8 +66,7 @@ paths:
           description: RIL100 ID
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
           description: Data is available
