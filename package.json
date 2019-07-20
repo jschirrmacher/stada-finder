@@ -1,0 +1,29 @@
+{
+  "name": "stada-finder",
+  "version": "1.0.0",
+  "description": "Find StaDa data easier",
+  "main": "src/server.js",
+  "dependencies": {
+    "csv-parse": "^4.4.3",
+    "csv-parser": "^2.3.0",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
+    "string-similarity": "^3.0.0",
+    "swagger-ui-express": "^4.0.7",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jschirrmacher/stada-finder.git"
+  },
+  "author": "Joachim Schirrmacher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jschirrmacher/stada-finder/issues"
+  },
+  "homepage": "https://github.com/jschirrmacher/stada-finder#readme"
+}

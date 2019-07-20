@@ -1,0 +1,497 @@
+openapi: "3.0.0"
+info:
+  title: Access station data by various methods
+  version: v1
+servers:
+  - url: http://localhost:3000/
+paths:
+  /health:
+    get:
+      summary: Get health status
+      description: If the service is available, it returns the status 'ok'
+      responses:
+        '200':
+          description: Service is running
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /:
+    get:
+      summary: Get all station data at once
+      responses:
+        '200':
+          description: Data is available
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /evas/{eva}:
+    get:
+      summary: Get station by its EVA number
+      parameters:
+        - name: eva
+          in: path
+          description: EVA number
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Data is available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Station"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /ril100/{ril100}:
+    get:
+      summary: Get station by its EVA number
+      parameters:
+        - name: ril100
+          in: path
+          description: RIL100 ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Data is available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Station"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /szentralen:
+    get:
+      summary: Get a list of service zentralen
+      responses:
+        '200':
+          description: Data is available
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /szentralen/{id}:
+    get:
+      summary: Get a specific service zentrale
+      parameters:
+        - name: id
+          in: path
+          description: Service Zentralen ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Data is available
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /szentralen/{id}/stations:
+    get:
+      summary: Get all stations assigned to a specific service zentrale
+      parameters:
+        - name: id
+          in: path
+          description: Service Zentralen ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Data is available
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /stationManagements:
+    get:
+      summary: Get a list of station managements
+      responses:
+        '200':
+          description: Data is available
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /stationManagements/{id}:
+    get:
+      summary: Get a specific station management
+      parameters:
+        - name: id
+          in: path
+          description: Station management ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Data is available
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /stationManagements/{id}/stations:
+    get:
+      summary: Get all stations assigned to a specific station management
+      parameters:
+        - name: id
+          in: path
+          description: Station management ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Data is available
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+    Station:
+      type: object
+      properties:
+        number:
+          description: unique identifier representing a specific railway station
+          type: integer
+          format: int32
+        name:
+          description: the stations name
+          type: string
+        mailingAdress:
+          $ref: "#/components/schemas/Address"
+        category:
+          description: the stations category (-1...7). Stations with category -1 or 0 are
+            not in production, e.g. planned, saled, without train stops.
+          type: integer
+          format: int32
+        priceCategory:
+          description: determines in some respect the price for train stops at a specific
+            station (1..7)
+          type: integer
+          format: int32
+        federalState:
+          description: german federal state
+          type: string
+        hasParking:
+          description: public parking y/n
+          type: boolean
+        hasBicycleParking:
+          description: public bicycle parking y/n
+          type: boolean
+        hasPublicFacilities:
+          description: public facilities y/n
+          type: boolean
+        hasLockerSystem:
+          description: public facilities y/n
+          type: boolean
+        hasLocalPublicTransport:
+          description: local public transport y/n
+          type: boolean
+        hasTaxiRank:
+          description: taxi rank in front of the station y/n
+          type: boolean
+        hasTravelNecessities:
+          description: a shop for travel necessities y/n
+          type: boolean
+        hasSteplessAccess:
+          $ref: "#/components/schemas/Partial"
+        hasMobilityService:
+          description: values are 'no', 'yes, advance notification is requested...' or
+            'yes, advance notification is required...'
+          type: string
+        hasWiFi:
+          description: public Wi-Fi is available y/n
+          type: boolean
+        hasTravelCenter:
+          description: local travel center y/n
+          type: boolean
+        hasRailwayMission:
+          description: railway mission y/n
+          type: boolean
+        hasDBLounge:
+          description: DB lounge y/n
+          type: boolean
+        hasLostAndFound:
+          description: lost and found y/n
+          type: boolean
+        hasCarRental:
+          description: car sharing or car rental y/n
+          type: boolean
+        evaNumbers:
+          description: station related EVA-Numbers
+          type: array
+          items:
+            $ref: "#/components/schemas/EVANumber"
+        riL100Identifiers:
+          description: station related Ril100s
+          type: array
+          items:
+            $ref: "#/components/schemas/RiL100Identifier"
+        timetableOffice:
+          $ref: "#/components/schemas/TimetableOffice"
+        stationManagement:
+          $ref: "#/components/schemas/StationManagementRef"
+        localServiceStaff:
+          $ref: "#/components/schemas/Schedule"
+        DBinformation:
+          $ref: "#/components/schemas/Schedule"
+        regionalbereich:
+          $ref: "#/components/schemas/RegionalBereichRef"
+        szentrale:
+          $ref: "#/components/schemas/SZentraleRef"
+        aufgabentraeger:
+          $ref: "#/components/schemas/Aufgabentraeger"
+    EVANumber:
+      type: object
+      properties:
+        number:
+          description: EVA identifier
+          type: integer
+        isMain:
+          description: station related EVA-Numbers
+          type: boolean
+        geographicCoordinate:
+          $ref: "#/components/schemas/GeographicPoint"
+    SZentraleRef:
+      type: object
+      description: reference object contained in station
+      properties:
+        number:
+          description: unique identifier for SZentrale
+          type: integer
+          format: int32
+        name:
+          description: unique identifier of 3SZentrale
+          type: string
+        publicPhoneNumber:
+          type: string
+    SZentrale:
+      description: 3-S-Zentralen are 7/24 hours operating centers for german railway
+        stations
+      type: object
+      properties:
+        number:
+          description: unique identifier for SZentrale
+          type: integer
+          format: int32
+        name:
+          description: unique identifier of 3SZentrale
+          type: string
+        publicPhoneNumber:
+          type: string
+        address:
+          $ref: "#/components/schemas/Address"
+        publicFaxNumber:
+          description: public fax number
+          type: string
+        internalPhoneNumber:
+          description: internal phone number
+          type: string
+        internalFaxNumber:
+          description: internal fax number
+          type: string
+        mobilePhoneNumber:
+          description: mobile phone number (no longer supported!)
+          type: string
+        email:
+          description: email adress of the 3-S-Zentrale (no longer supported!)
+          type: string
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        houseNumber:
+          type: string
+        zipcode:
+          type: integer
+        city:
+          type: string
+    TimetableOffice:
+      type: object
+      properties:
+        name:
+          type: string
+          description: identifier
+        email:
+          type: string
+          description: email
+    StationManagementRef:
+      type: object
+      properties:
+        name:
+          type: string
+        number:
+          type: integer
+          description: identifier
+    StationManagement:
+      type: object
+      properties:
+        name:
+          type: string
+        number:
+          type: integer
+          description: identifier
+    GeographicPoint:
+      type: object
+      description: GEOJSON object of type point. By default WGS84 is the coordinate system
+        in GEOJSON.
+      properties:
+        type:
+          description: the type of the GEOJSON Object e.g. point. Currently only point
+            coordinates without altitude are provided.
+          type: string
+        coordinates:
+          description: first value is longitude, second latitude third altitude (currently
+            not provided)
+          type: array
+          items:
+            type: number
+            format: double
+    RiL100Identifier:
+      type: object
+      properties:
+        rilIdentifier:
+          description: Unique identifier of 'Betriebsstelle' according to Ril100
+          type: string
+        isMain:
+          description: is stations main Ril100. Determination of Station&Service AG
+          type: boolean
+        hasSteamPermission:
+          description: permission for steam engines y/n
+          type: boolean
+        geographicCoordinate:
+          $ref: "#/components/schemas/GeographicPoint"
+    OpeningHours:
+      type: object
+      description: period of time from/to
+      properties:
+        fromTime:
+          type: string
+          format: date
+        toTime:
+          type: string
+          format: date
+    Schedule:
+      type: object
+      description: a weekly schedule
+      properties:
+        monday:
+          $ref: "#/components/schemas/OpeningHours"
+        tuesday:
+          $ref: "#/components/schemas/OpeningHours"
+        wednesday:
+          $ref: "#/components/schemas/OpeningHours"
+        thursday:
+          $ref: "#/components/schemas/OpeningHours"
+        friday:
+          $ref: "#/components/schemas/OpeningHours"
+        saturday:
+          $ref: "#/components/schemas/OpeningHours"
+        sunday:
+          $ref: "#/components/schemas/OpeningHours"
+        holiday:
+          $ref: "#/components/schemas/OpeningHours"
+    RegionalBereichRef:
+      type: object
+      description: reference object. an internal organization type of Station&Service,
+        regional department.
+      properties:
+        name:
+          description: name of the regional department
+          type: string
+        shortName:
+          type: string
+        number:
+          description: unique identifier of the regional department
+          type: integer
+          format: int32
+    Regionalbereich:
+      type: object
+      description: reference object. an internal organization type of Station&Service,
+        regional department.
+      properties:
+        name:
+          description: name of the regional department
+          type: string
+        shortName:
+          type: string
+        number:
+          description: unique identifier of the regional department
+          type: integer
+          format: int32
+    Aufgabentraeger:
+      type: object
+      description: local public sector entity, responsible for short distance public
+        transport in a specific area
+      properties:
+        shortname:
+          description: unique identifier
+          type: string
+        name:
+          description: full name of Aufgabentraeger
+          type: string
+    Partial:
+      type: string
+      enum:
+        - yes
+        - no
+        - partial
