@@ -54,11 +54,11 @@ module.exports = {
   },
 
   getByEva(eva) {
-    return byEva[eva]
+    return store.byEva[eva]
   },
 
   getByRil100(ril100) {
-    return byRil100[ril100]
+    return store.byRil100[ril100]
   },
 
   getSZentralen() {
