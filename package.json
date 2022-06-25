@@ -7,7 +7,7 @@
     "csv-parse": "^4.4.3",
     "csv-parser": "^2.3.0",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "string-similarity": "^3.0.0",
     "swagger-ui-express": "^4.0.7",
     "yamljs": "^0.3.0"
